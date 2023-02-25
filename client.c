@@ -6,7 +6,7 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:16 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/02/25 04:09:56 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/02/25 04:54:06 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,36 @@ int     check_errors(int argc, char **argv)
     return (0);
 }
 
-void ctob(char car)
+void ctob(char car, int pid)
 {
     int b;
+    int j;
 
-    b = -1;
-    while (b < 8)
+    b = 8;
+    while (--b < 8)
     {
-        if ((car << 7) & 0b1)
+        if ((car >> b) & 1)
         {
-            if (kill())
+            if (kill(pid, SIGUSR1) == -1)
+                exit(1);
         }
-        car = car >> 1;
+        else((car >> b) & 0))
+        {
+            if (kill(pid, SIGUSR2) == -1)
+                exit(1);
+        }
+            
     }
 }
 
-void    send_mesage(char *msg)
+void    send_mesage(char *msg, int pid)
 {
     int i;
 
     i = -1;
     while (msg[++i])
-        ctob(msg[i]);
+        ctob(msg[i], pid);
+    ctob('\0', pid);
 }
 
 int main(int argc, char **argv)
@@ -62,7 +70,7 @@ int main(int argc, char **argv)
 
     check_errors(argc, argv);
     pid = ft_atoi(argv[1]);
-    send_mesage(argv[2]);
+    send_mesage(argv[2], pid);
     kill(pid, SIGUSR1);
     kill(pid, SIGUSR2);
     
