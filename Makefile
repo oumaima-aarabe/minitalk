@@ -6,7 +6,7 @@
 #    By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/22 22:17:07 by ouaarabe          #+#    #+#              #
-#    Updated: 2023/02/25 00:55:40 by ouaarabe         ###   ########.fr        #
+#    Updated: 2023/02/26 03:14:15 by ouaarabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,9 @@ NAME	=
 CLIENT	=	client
 SERVER	=	server
 
-
-LIBFT=	libft/libft.a
-LIBFT_DIR	=	libft
+#ft_printf Variables:
+LIBFTPRINTF	=	ft_printf/libftprintf.a
+LIBFTPRINTF_DIR	=	ft_printf
 
 #minitalk variables
 SRC_C	=	client.c
@@ -38,29 +38,29 @@ RESET		=	\e[0m
 _SUCCESS	=	[$(GREEN)SUCCESS$(RESET)]
 _INFO		=	[$(YELLOW)INFO$(RESET)]
 
-all: $(LIBFT) $(CLIENT) $(SERVER)
+all: $(LIBFTPRINTF) $(CLIENT) $(SERVER)
 
 $(SERVER): $(OBJ_S) $(INC)
-	@ $(CC) $(CFLAGS) $(LIBFT) -o $@ $(OBJ_S)
+	@ $(CC) $(CFLAGS) $(LIBFTPRINTF) -o $@ $(OBJ_S)
 	@printf "$(_SUCCESS) server ready.\n"
 
 $(CLIENT): $(OBJ_C) $(INC)
-	@ $(CC) $(CFLAGS) $(LIBFT) -o $@ $(OBJ_C)
+	@ $(CC) $(CFLAGS) $(LIBFTPRINTF) -o $@ $(OBJ_C)
 	@printf "$(_SUCCESS) client ready.\n"
 
 %.o: %.c
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFTPRINTF):
-	@ $(MAKE) -C $(LIBFT_DIR)
+	@ $(MAKE) -C $(LIBFTPRINTF_DIR)
 
 clean:
-	@ $(MAKE) clean -C $(LIBFT_DIR)
+	@ $(MAKE) clean -C $(LIBFTPRINTF_DIR)
 	@ $(RM) $(OBJ_C) $(OBJ_S)
 	@printf "$(_INFO) object files removed.\n"
 
 fclean: clean
-	@ $(MAKE) fclean -C $(LIBFT_DIR)
+	@ $(MAKE) fclean -C $(LIBFTPRINTF_DIR)
 	@ $(RM) $(CLIENT) $(SERVER)
 	@printf "$(_INFO) client removed.\n"
 	@printf "$(_INFO) server removed.\n"
