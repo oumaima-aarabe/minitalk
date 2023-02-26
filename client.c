@@ -6,7 +6,7 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:16 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/02/26 05:31:34 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/02/26 08:24:58 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,10 @@ void ctob(char car, int pid)
     while (--b >= 0)
     {
         if ((car >> b) & 1)
-        {
             kill(pid, SIGUSR1);
-            printf("1");
-        }
         else if(!((car >> b) & 1))
-        {
             kill(pid, SIGUSR2);
-            printf("0");
-            
-        }
-        // printf("[b = %d]", b);
+
     }
     usleep(100);
 }
@@ -66,7 +59,7 @@ void    send_mesage(char *msg, int pid)
     i = -1;
     while (msg[++i])
         ctob(msg[i], pid);
-    // ctob('\0', pid);
+    ctob('\0', pid);
 }
 
 int main(int argc, char **argv)
