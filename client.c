@@ -6,7 +6,7 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:16 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/03/01 05:00:39 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 06:00:09 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int     check_errors(int argc, char **argv)
 	return (0);
 }
 
-void ctob(char car, int pid)
+void ctob(char car, int s_pid)
 {
 	int b;
 
@@ -45,7 +45,7 @@ void ctob(char car, int pid)
 	{
 		if ((car >> b) & 1)
 		{
-			if (kill(pid, SIGUSR1) == -1)
+			if (kill(s_pid, SIGUSR1) == -1)
 			{
 				ft_printf("error!");
 				exit(1);
@@ -53,7 +53,7 @@ void ctob(char car, int pid)
 		}
 		else if(!((car >> b) & 1))
 		{
-			if (kill(pid, SIGUSR2) == -1)
+			if (kill(s_pid, SIGUSR2) == -1)
 			{
 				ft_printf("error!");
 				exit(1);
@@ -63,23 +63,37 @@ void ctob(char car, int pid)
 	}
 }
 
-void    send_mesage(char *msg, int pid)
+void    send_mesage(char *msg, int s_pid)
 {
 	int i;
 
 	i = -1;
 	while (msg[++i])
-		ctob(msg[i], pid);
-	ctob('\0', pid);
+		ctob(msg[i], s_pid);
+	ctob('\0', s_pid);
 }
 
+void	respond (int signal)
+{
+	if(signal == SIGUSR1)
+	{
+		ft_printf("message sent to the server successfully\n");
+		exit(0);
+	}
+	
+}
 int main(int argc, char **argv)
 {
 	int s_pid;
 	int c_pid;
 	
+	c_pid = getpid();
+	signal(SIGUSR1, respond);
+	signal(SIGUSR2, respond);
+	ft_printf ("The client process ID : %d\n", c_pid);
 	check_errors(argc, argv);
 	s_pid = ft_atoi(argv[1]);
+	ft_printf("message currently sending to server\n");
 	send_mesage(argv[2], s_pid);
 	return (0); 
 }

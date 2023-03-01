@@ -6,24 +6,24 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:37 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/03/01 04:59:38 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 05:55:19 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-//server :
+
 void handler(int sig, siginfo_t *info, void *context )
 {
 	static int				bit;
 	static unsigned char	c;
-	static int				pid;
+	static int				c_pid;
 
-	if (pid != info->si_pid)
+	if (c_pid != info->si_pid)
 	{
 		bit = 0;
 		c = 0;
-		pid = info->si_pid;
+		c_pid = info->si_pid;
 	}	
 	if (sig == SIGUSR1)
 	{
@@ -35,6 +35,11 @@ void handler(int sig, siginfo_t *info, void *context )
 	if (bit == 8)
 	{
 		ft_printf("%c", c);
+		if (c == '\0')
+		{
+			usleep(100);
+			kill(c_pid, SIGUSR1);
+		}
 		c = 0;
 		bit = 0;
 	}
@@ -46,7 +51,7 @@ int main(void)
 	struct sigaction sa;
 
 	pid = (int)getpid();
-	ft_printf("here is the process ID : %d\n", pid);
+	ft_printf("here is the server process ID : %d\n", pid);
 	sa.sa_sigaction = handler;
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
