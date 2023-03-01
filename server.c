@@ -6,7 +6,7 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:37 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/02/26 23:52:17 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 04:59:38 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void handler(int sig, siginfo_t *info, void *context )
 		bit++;
 	if (bit == 8)
 	{
-		write (1,&c,1);
-		fflush(stdout);
+		ft_printf("%c", c);
 		c = 0;
 		bit = 0;
 	}
@@ -50,15 +49,13 @@ int main(void)
 	ft_printf("here is the process ID : %d\n", pid);
 	sa.sa_sigaction = handler;
 	sa.sa_flags = SA_SIGINFO;
-	// sigemptyset(&sa.sa_mask);
-	// sigaddset(&sa.sa_mask, SIGUSR1);
-	// sigaddset(&sa.sa_mask, SIGUSR2);
-	sigaction(SIGUSR1, &sa, NULL);
-	sigaction(SIGUSR2, &sa, NULL);
-	// if (sigaction(SIGUSR1, &sa, NULL) == -1)
-	// 	return -1;
-	// if (sigaction(SIGUSR2, &sa, NULL) == -1)
-	// 	return -1;
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGUSR1);
+	sigaddset(&sa.sa_mask, SIGUSR2);
+	if (sigaction(SIGUSR1, &sa, NULL) == -1)
+		return -1;
+	if (sigaction(SIGUSR2, &sa, NULL) == -1)
+		return -1;
 
 	while (1)
 		pause();

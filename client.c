@@ -6,7 +6,7 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:16 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/02/26 23:49:18 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 05:00:39 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int     check_errors(int argc, char **argv)
 	if (argc != 3)
 	{
 	   ft_printf("usage : ./client [pid] [message]!!! \n");
-		return 1;
+		exit(1);
 	}
 	while (argv[1][i])
 	{
 		if (!ft_strchr("0123456789", argv[1][i]))
 		{
 			ft_printf("The PID of an individual process should be an integer with a positive value! \n");
-			return (1);
+			exit(1);
 		}
 		i++;
 	}
@@ -47,19 +47,19 @@ void ctob(char car, int pid)
 		{
 			if (kill(pid, SIGUSR1) == -1)
 			{
-				write (1,"error",5);
-				exit(0);
+				ft_printf("error!");
+				exit(1);
 			}
 		}
 		else if(!((car >> b) & 1))
 		{
 			if (kill(pid, SIGUSR2) == -1)
 			{
-				write (1,"error",5);
-				exit(0);
+				ft_printf("error!");
+				exit(1);
 			}
 		}
-		usleep(400);
+		usleep(300);
 	}
 }
 
@@ -70,16 +70,16 @@ void    send_mesage(char *msg, int pid)
 	i = -1;
 	while (msg[++i])
 		ctob(msg[i], pid);
-	// ctob('\0', pid);
+	ctob('\0', pid);
 }
 
 int main(int argc, char **argv)
 {
-	int pid;
-
-	if (check_errors(argc, argv))
-		return 1;
-	pid = ft_atoi(argv[1]);
-	send_mesage(argv[2], pid);
-	return (0);   
+	int s_pid;
+	int c_pid;
+	
+	check_errors(argc, argv);
+	s_pid = ft_atoi(argv[1]);
+	send_mesage(argv[2], s_pid);
+	return (0); 
 }
