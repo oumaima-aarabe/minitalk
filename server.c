@@ -6,14 +6,13 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:37 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/03/01 05:55:19 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 06:44:50 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-
-void handler(int sig, siginfo_t *info, void *context )
+void	handler(int sig, siginfo_t *info, void *context)
 {
 	static int				bit;
 	static unsigned char	c;
@@ -26,10 +25,7 @@ void handler(int sig, siginfo_t *info, void *context )
 		c_pid = info->si_pid;
 	}	
 	if (sig == SIGUSR1)
-	{
-		c |= 128 >> bit;
-		bit++;
-	}
+		c |= 128 >> bit++;
 	if (sig == SIGUSR2)
 		bit++;
 	if (bit == 8)
@@ -45,10 +41,10 @@ void handler(int sig, siginfo_t *info, void *context )
 	}
 }
 
-int main(void)
+int	main(void)
 {
-	int pid;
-	struct sigaction sa;
+	int					pid;
+	struct sigaction	sa;
 
 	pid = (int)getpid();
 	ft_printf("here is the server process ID : %d\n", pid);
@@ -58,10 +54,10 @@ int main(void)
 	sigaddset(&sa.sa_mask, SIGUSR1);
 	sigaddset(&sa.sa_mask, SIGUSR2);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1)
-		return -1;
+		return (-1);
 	if (sigaction(SIGUSR2, &sa, NULL) == -1)
-		return -1;
-
+		return (-1);
 	while (1)
 		pause();
+	return (0);
 }
