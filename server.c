@@ -6,11 +6,21 @@
 /*   By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 22:15:37 by ouaarabe          #+#    #+#             */
-/*   Updated: 2023/03/01 06:44:50 by ouaarabe         ###   ########.fr       */
+/*   Updated: 2023/03/01 09:00:35 by ouaarabe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void	confirmation(unsigned char c, int c_pid)
+{
+	usleep(100);
+	if (kill(c_pid, SIGUSR1) == -1)
+	{
+		ft_printf("error!\n");
+		exit (1);
+	}
+}
 
 void	handler(int sig, siginfo_t *info, void *context)
 {
@@ -32,10 +42,7 @@ void	handler(int sig, siginfo_t *info, void *context)
 	{
 		ft_printf("%c", c);
 		if (c == '\0')
-		{
-			usleep(100);
-			kill(c_pid, SIGUSR1);
-		}
+			confirmation(c, c_pid);
 		c = 0;
 		bit = 0;
 	}
