@@ -6,50 +6,69 @@
 #    By: ouaarabe <ouaarabe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/22 22:17:07 by ouaarabe          #+#    #+#              #
-#    Updated: 2023/03/01 01:33:49 by ouaarabe         ###   ########.fr        #
+#    Updated: 2023/03/03 09:17:17 by ouaarabe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CLIENT	=	client
 SERVER	=	server
 
-LIBFTPRINTF	=	ft_printf/libftprintf.a
-LIBFTPRINTF_DIR	=	ft_printf
+CLIENT_B	=	client_bonus
+SERVER_B	=	server_bonus
 
-SRC_C	=	client.c
-SRC_S	=	server.c
+UTILS		=	outils/utils.a
+UTILS_DIR	=	outils
 
-OBJ_S	=	server.o
-OBJ_C	=	client.o
+SRC_C	=	mandatory/client.c
+SRC_S	=	mandatory/server.c
+SRC_CB	=	bonus/client_bonus.c
+SRC_SB	=	bonus/server_bonus.c
 
-INC		=	minitalk.h
+OBJ_S	=	mandatory/server.o
+OBJ_C	=	mandatory/client.o
+OBJ_SB	=	bonus/server_bonus.o
+OBJ_CB	=	bonus/client_bonus.o
+
+INC		=	mandatory/minitalk.h
+INC_B	=	bonus/minitalk_bonus.h
 
 CC			=	gcc
 CFLAG		=	-Wall -Wextra -Werror
 RM			=	rm -rf
 
-all: $(LIBFTPRINTF) $(CLIENT) $(SERVER)
+all: $(UTILS) $(CLIENT) $(SERVER)
 
 $(SERVER): $(OBJ_S) $(INC)
-	@ $(CC) $(CFLAGS) $(LIBFTPRINTF) -o $@ $(OBJ_S)
+	@ $(CC) $(CFLAGS) $(UTILS) -o $@ $(OBJ_S)
 
 $(CLIENT): $(OBJ_C) $(INC)
-	@ $(CC) $(CFLAGS) $(LIBFTPRINTF) -o $@ $(OBJ_C)
+	@ $(CC) $(CFLAGS) $(UTILS) -o $@ $(OBJ_C)
 
 %.o: %.c
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
-$(LIBFTPRINTF):
-	@ $(MAKE) -C $(LIBFTPRINTF_DIR)
+$(UTILS):
+	@ $(MAKE) -C $(UTILS_DIR)
 
 clean:
-	@ $(MAKE) clean -C $(LIBFTPRINTF_DIR)
+	@ $(MAKE) clean -C $(UTILS_DIR)
 	@ $(RM) $(OBJ_C) $(OBJ_S)
+	@ $(RM) $(OBJ_CB) $(OBJ_SB)
 
 fclean: clean
-	@ $(MAKE) fclean -C $(LIBFTPRINTF_DIR)
+	@ $(MAKE) fclean -C $(UTILS_DIR)
 	@ $(RM) $(CLIENT) $(SERVER)
+	@ $(RM) $(CLIENT_B) $(SERVER_B)
 
 re: fclean all
 
-.PHONY: clean fclean re
+bonus: $(UTILS) $(CLIENT_B) $(SERVER_B)
+
+$(SERVER_B): $(OBJ_SB) $(INC_B)
+	@ $(CC) $(CFLAGS) $(UTILS) -o $@ $(OBJ_SB)
+
+$(CLIENT_B): $(OBJ_CB) $(INC_B)
+	@ $(CC) $(CFLAGS) $(UTILS) -o $@ $(OBJ_CB)
+
+
+.PHONY: clean fclean re bonus
